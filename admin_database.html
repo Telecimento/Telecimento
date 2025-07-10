@@ -1,0 +1,1403 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TELECIMENTO - Painel Administrativo</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Reset e Base */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            color: #ffffff;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 50%, #0f0f0f 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header */
+        .header {
+            background: rgba(0, 0, 0, 0.9);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 20px;
+        }
+
+        .logo h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            background: linear-gradient(45deg, #ff0000, #ffffff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: 2px;
+        }
+
+        .logo .tagline {
+            font-size: 0.8rem;
+            color: #888;
+            font-weight: 300;
+        }
+
+        .back-btn {
+            background: linear-gradient(45deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 50px;
+            color: white;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+        }
+
+        .back-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+        }
+
+        /* Main Content */
+        .main-content {
+            padding: 2rem 0;
+            min-height: calc(100vh - 100px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Admin Login */
+        .admin-login {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            padding: 3rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            text-align: center;
+            max-width: 400px;
+            width: 100%;
+        }
+
+        .admin-login h2 {
+            margin-bottom: 2rem;
+            color: #fff;
+            font-weight: 600;
+        }
+
+        .login-form h3 {
+            margin-bottom: 1.5rem;
+            color: #fff;
+        }
+
+        .login-form input {
+            width: 100%;
+            padding: 1rem;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.05);
+            color: #fff;
+            font-size: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .login-form input::placeholder {
+            color: #888;
+        }
+
+        .login-form button {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 10px;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+
+        .login-form button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+        }
+
+        /* Dashboard */
+        .admin-dashboard {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            padding: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            width: 100%;
+            max-width: 1000px;
+            display: none;
+        }
+
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .dashboard-header h2 {
+            color: #fff;
+            font-weight: 600;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .logout-btn {
+            background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            color: white;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .logout-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 107, 107, 0.3);
+        }
+
+        .clear-data-btn {
+            background: linear-gradient(45deg, #dc3545, #c82333);
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            color: white;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .clear-data-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(220, 53, 69, 0.3);
+        }
+
+        .refresh-btn {
+            background: linear-gradient(45deg, #28a745, #20c997);
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            color: white;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .refresh-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(40, 167, 69, 0.3);
+        }
+
+        .dashboard-tabs {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .tab-btn {
+            background: none;
+            border: none;
+            color: #888;
+            padding: 1rem 1.5rem;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .tab-btn.active,
+        .tab-btn:hover {
+            color: #fff;
+            border-bottom-color: #ff6b6b;
+        }
+
+        .tab-content {
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Stats */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 1.5rem;
+            border-radius: 15px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .stat-card h4 {
+            color: #888;
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #ff6b6b;
+        }
+
+        .sectors-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .sector-stat {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 1.5rem;
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .sector-stat h4 {
+            color: #fff;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        .rating-breakdown {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .rating-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.5rem;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 8px;
+        }
+
+        .rating-label {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #ccc;
+        }
+
+        .rating-count {
+            font-weight: 600;
+            color: #ff6b6b;
+        }
+
+        /* Reports */
+        .reports-section {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 2rem;
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .report-content {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin: 1rem 0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            line-height: 1.8;
+            color: #ccc;
+            white-space: pre-wrap;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .export-btn {
+            background: linear-gradient(45deg, #00d2ff, #3a7bd5);
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 10px;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .export-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0, 210, 255, 0.3);
+        }
+
+        /* Charts */
+        .charts-section {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 2rem;
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .chart-container {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 2rem;
+            border-radius: 10px;
+            margin-top: 1rem;
+            text-align: center;
+        }
+
+        /* Modal de Confirmação */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+            border-radius: 20px;
+            padding: 2rem;
+            max-width: 400px;
+            width: 90%;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+            text-align: center;
+        }
+
+        .modal-content h3 {
+            color: #fff;
+            margin-bottom: 1rem;
+        }
+
+        .modal-content p {
+            color: #ccc;
+            margin-bottom: 2rem;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+        }
+
+        .confirm-btn {
+            background: linear-gradient(45deg, #dc3545, #c82333);
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 10px;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .confirm-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(220, 53, 69, 0.3);
+        }
+
+        .cancel-btn {
+            background: linear-gradient(45deg, #6c757d, #5a6268);
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 10px;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .cancel-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(108, 117, 125, 0.3);
+        }
+
+        /* Loading */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Database Status */
+        .db-status {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 1rem;
+            border-radius: 10px;
+            margin-bottom: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .db-status h4 {
+            color: #fff;
+            margin-bottom: 0.5rem;
+        }
+
+        .db-status p {
+            color: #ccc;
+            font-size: 0.9rem;
+        }
+
+        .status-indicator {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            margin-right: 0.5rem;
+        }
+
+        .status-online {
+            background: #28a745;
+        }
+
+        .status-offline {
+            background: #dc3545;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .dashboard-tabs {
+                flex-wrap: wrap;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .admin-login {
+                margin: 1rem;
+                padding: 2rem;
+            }
+
+            .header-actions {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .logo h1 {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="logo">
+                <h1>TELECIMENTO</h1>
+                <span class="tagline">Painel Administrativo</span>
+            </div>
+            <a href="index_database.html" class="back-btn">
+                <span>←</span> Voltar
+            </a>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="container">
+            <!-- Admin Login -->
+            <div class="admin-login" id="adminLogin">
+                <h2>Área Administrativa</h2>
+                <div class="login-form">
+                    <h3>Digite a senha de acesso:</h3>
+                    <input type="password" id="adminPassword" placeholder="Senha">
+                    <button onclick="authenticateAdmin()">Entrar</button>
+                </div>
+            </div>
+
+            <!-- Admin Dashboard -->
+            <div class="admin-dashboard" id="adminDashboard">
+                <div class="dashboard-header">
+                    <h2>Painel de Controle</h2>
+                    <div class="header-actions">
+                        <button class="refresh-btn" onclick="refreshData()">🔄 Atualizar</button>
+                        <button class="clear-data-btn" onclick="showClearDataModal()">🗑️ Apagar Dados</button>
+                        <button class="logout-btn" onclick="logout()">Sair</button>
+                    </div>
+                </div>
+
+                <!-- Database Status -->
+                <div class="db-status">
+                    <h4><span class="status-indicator" id="dbStatusIndicator"></span>Status do Banco de Dados</h4>
+                    <p id="dbStatusText">Verificando conexão...</p>
+                </div>
+
+                <div class="dashboard-tabs">
+                    <button class="tab-btn active" onclick="showTab('overview')">Visão Geral</button>
+                    <button class="tab-btn" onclick="showTab('reports')">Relatórios</button>
+                    <button class="tab-btn" onclick="showTab('charts')">Gráficos</button>
+                    <button class="tab-btn" onclick="showTab('database')">Banco de Dados</button>
+                </div>
+
+                <div class="tab-content" id="overviewTab">
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <h4>Total de Avaliações</h4>
+                            <span class="stat-number" id="totalEvaluations">-</span>
+                        </div>
+                        <div class="stat-card">
+                            <h4>Média Geral</h4>
+                            <span class="stat-number" id="overallAverage">-</span>
+                        </div>
+                        <div class="stat-card">
+                            <h4>Última Avaliação</h4>
+                            <span class="stat-number" id="lastEvaluation">-</span>
+                        </div>
+                    </div>
+                    
+                    <div class="sectors-stats">
+                        <div class="sector-stat">
+                            <h4>Setor Geral</h4>
+                            <div class="rating-breakdown" id="geralBreakdown"></div>
+                        </div>
+                        <div class="sector-stat">
+                            <h4>Setor de Vendas</h4>
+                            <div class="rating-breakdown" id="vendasBreakdown"></div>
+                        </div>
+                        <div class="sector-stat">
+                            <h4>Setor de Caixa</h4>
+                            <div class="rating-breakdown" id="caixaBreakdown"></div>
+                        </div>
+                        <div class="sector-stat">
+                            <h4>Setor de Expedição</h4>
+                            <div class="rating-breakdown" id="expedicaoBreakdown"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tab-content" id="reportsTab" style="display: none;">
+                    <div class="reports-section">
+                        <h3>Relatório Detalhado</h3>
+                        <div class="report-content" id="detailedReport">Carregando relatório...</div>
+                        <button onclick="exportReport()" class="export-btn">Exportar Relatório</button>
+                    </div>
+                </div>
+
+                <div class="tab-content" id="chartsTab" style="display: none;">
+                    <div class="charts-section">
+                        <h3>Gráficos de Avaliação</h3>
+                        <div class="chart-container">
+                            <canvas id="evaluationChart" width="400" height="200"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tab-content" id="databaseTab" style="display: none;">
+                    <div class="reports-section">
+                        <h3>Informações do Banco de Dados</h3>
+                        <div class="report-content" id="databaseInfo">Carregando informações...</div>
+                        <button onclick="exportDatabaseInfo()" class="export-btn">Exportar Dados</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Modal de Confirmação -->
+    <div class="modal-overlay" id="clearDataModal">
+        <div class="modal-content">
+            <h3>⚠️ Confirmar Exclusão</h3>
+            <p>Tem certeza que deseja apagar todos os dados de avaliação? Esta ação não pode ser desfeita.</p>
+            <div class="modal-actions">
+                <button class="confirm-btn" onclick="confirmClearData()">Sim, Apagar</button>
+                <button class="cancel-btn" onclick="hideClearDataModal()">Cancelar</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ===== CONFIGURAÇÕES DO BANCO DE DADOS =====
+        const DB_NAME = 'TelecimentoDB';
+        const DB_VERSION = 1;
+        const STORE_NAME = 'evaluations';
+        const STORAGE_KEY = 'telecimento_evaluations';
+        const ADMIN_PASSWORD = '@TELEcimento2025';
+
+        // ===== CLASSE PARA GERENCIAR O BANCO DE DADOS =====
+        class TelecimentoDatabase {
+            constructor() {
+                this.db = null;
+                this.isReady = false;
+                this.initPromise = this.initDatabase();
+            }
+
+            async initDatabase() {
+                return new Promise((resolve, reject) => {
+                    if (!window.indexedDB) {
+                        console.warn('IndexedDB não suportado, usando apenas localStorage');
+                        this.isReady = true;
+                        resolve();
+                        return;
+                    }
+
+                    const request = indexedDB.open(DB_NAME, DB_VERSION);
+
+                    request.onerror = () => {
+                        console.error('Erro ao abrir banco de dados:', request.error);
+                        this.isReady = true;
+                        resolve(); // Continua sem IndexedDB
+                    };
+
+                    request.onsuccess = (event) => {
+                        this.db = event.target.result;
+                        this.isReady = true;
+                        console.log('Banco de dados inicializado com sucesso');
+                        resolve();
+                    };
+
+                    request.onupgradeneeded = (event) => {
+                        const db = event.target.result;
+                        
+                        // Criar object store se não existir
+                        if (!db.objectStoreNames.contains(STORE_NAME)) {
+                            const store = db.createObjectStore(STORE_NAME, { keyPath: 'id' });
+                            store.createIndex('timestamp', 'timestamp', { unique: false });
+                            store.createIndex('geral', 'geral', { unique: false });
+                            store.createIndex('vendas', 'vendas', { unique: false });
+                            store.createIndex('caixa', 'caixa', { unique: false });
+                            store.createIndex('expedicao', 'expedicao', { unique: false });
+                            console.log('Object store criado');
+                        }
+                    };
+                });
+            }
+
+            async getAllEvaluations() {
+                await this.initPromise;
+
+                if (this.db) {
+                    return new Promise((resolve, reject) => {
+                        const transaction = this.db.transaction([STORE_NAME], 'readonly');
+                        const store = transaction.objectStore(STORE_NAME);
+                        const request = store.getAll();
+
+                        request.onsuccess = () => {
+                            const evaluations = request.result || [];
+                            console.log(`Carregadas ${evaluations.length} avaliações do IndexedDB`);
+                            resolve(evaluations);
+                        };
+
+                        request.onerror = () => {
+                            console.error('Erro ao carregar do IndexedDB:', request.error);
+                            // Fallback para localStorage
+                            resolve(this.getFromLocalStorage());
+                        };
+                    });
+                } else {
+                    return this.getFromLocalStorage();
+                }
+            }
+
+            getFromLocalStorage() {
+                try {
+                    const stored = localStorage.getItem(STORAGE_KEY);
+                    if (stored) {
+                        const evaluations = JSON.parse(stored);
+                        console.log(`Carregadas ${evaluations.length} avaliações do localStorage`);
+                        return evaluations;
+                    }
+                    
+                    // Tentar backup do sessionStorage
+                    const backup = sessionStorage.getItem(STORAGE_KEY + '_backup');
+                    if (backup) {
+                        const evaluations = JSON.parse(backup);
+                        console.log(`Carregadas ${evaluations.length} avaliações do sessionStorage backup`);
+                        // Restaurar no localStorage
+                        localStorage.setItem(STORAGE_KEY, backup);
+                        return evaluations;
+                    }
+                    
+                    return [];
+                } catch (error) {
+                    console.error('Erro ao carregar do localStorage:', error);
+                    return [];
+                }
+            }
+
+            async clearAllData() {
+                await this.initPromise;
+
+                // Limpar localStorage
+                localStorage.removeItem(STORAGE_KEY);
+                sessionStorage.removeItem(STORAGE_KEY + '_backup');
+
+                // Limpar IndexedDB
+                if (this.db) {
+                    return new Promise((resolve, reject) => {
+                        const transaction = this.db.transaction([STORE_NAME], 'readwrite');
+                        const store = transaction.objectStore(STORE_NAME);
+                        const request = store.clear();
+
+                        request.onsuccess = () => {
+                            console.log('Todos os dados foram limpos do IndexedDB');
+                            resolve();
+                        };
+
+                        request.onerror = () => {
+                            console.error('Erro ao limpar IndexedDB:', request.error);
+                            resolve(); // Continua mesmo com erro
+                        };
+                    });
+                } else {
+                    console.log('Dados limpos apenas do localStorage');
+                    return Promise.resolve();
+                }
+            }
+
+            async getStatistics() {
+                const evaluations = await this.getAllEvaluations();
+                
+                if (evaluations.length === 0) {
+                    return {
+                        total: 0,
+                        average: 0,
+                        lastEvaluation: null,
+                        sectors: {
+                            geral: { pessimo: 0, regular: 0, bom: 0, excelente: 0 },
+                            vendas: { pessimo: 0, regular: 0, bom: 0, excelente: 0 },
+                            caixa: { pessimo: 0, regular: 0, bom: 0, excelente: 0 },
+                            expedicao: { pessimo: 0, regular: 0, bom: 0, excelente: 0 }
+                        },
+                        evaluations: []
+                    };
+                }
+
+                const ratingValues = { 'pessimo': 1, 'regular': 2, 'bom': 3, 'excelente': 4 };
+                let totalScore = 0;
+                let totalRatings = 0;
+
+                const sectors = {
+                    geral: { pessimo: 0, regular: 0, bom: 0, excelente: 0 },
+                    vendas: { pessimo: 0, regular: 0, bom: 0, excelente: 0 },
+                    caixa: { pessimo: 0, regular: 0, bom: 0, excelente: 0 },
+                    expedicao: { pessimo: 0, regular: 0, bom: 0, excelente: 0 }
+                };
+
+                evaluations.forEach(evaluation => {
+                    ['geral', 'vendas', 'caixa', 'expedicao'].forEach(sector => {
+                        const rating = evaluation[sector];
+                        if (rating && sectors[sector][rating] !== undefined) {
+                            sectors[sector][rating]++;
+                            totalScore += ratingValues[rating];
+                            totalRatings++;
+                        }
+                    });
+                });
+
+                const average = totalRatings > 0 ? totalScore / totalRatings : 0;
+
+                // Ordenar por timestamp para pegar a última avaliação
+                const sortedEvaluations = evaluations.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+                const lastEvaluation = sortedEvaluations[0];
+
+                return {
+                    total: evaluations.length,
+                    average: average,
+                    lastEvaluation: lastEvaluation,
+                    sectors: sectors,
+                    evaluations: evaluations
+                };
+            }
+
+            async getDatabaseInfo() {
+                await this.initPromise;
+                
+                const info = {
+                    indexedDBSupported: !!window.indexedDB,
+                    databaseConnected: !!this.db,
+                    databaseName: DB_NAME,
+                    databaseVersion: DB_VERSION,
+                    storeName: STORE_NAME,
+                    localStorageSize: 0,
+                    sessionStorageSize: 0
+                };
+
+                // Calcular tamanho do localStorage
+                try {
+                    const localData = localStorage.getItem(STORAGE_KEY);
+                    info.localStorageSize = localData ? new Blob([localData]).size : 0;
+                } catch (e) {
+                    info.localStorageSize = 0;
+                }
+
+                // Calcular tamanho do sessionStorage
+                try {
+                    const sessionData = sessionStorage.getItem(STORAGE_KEY + '_backup');
+                    info.sessionStorageSize = sessionData ? new Blob([sessionData]).size : 0;
+                } catch (e) {
+                    info.sessionStorageSize = 0;
+                }
+
+                return info;
+            }
+        }
+
+        // ===== INSTÂNCIA GLOBAL DO BANCO DE DADOS =====
+        const database = new TelecimentoDatabase();
+
+        // ===== ESTADO DA APLICAÇÃO =====
+        let isAdminAuthenticated = false;
+        let currentStats = null;
+
+        // ===== INICIALIZAÇÃO =====
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeApp();
+        });
+
+        async function initializeApp() {
+            setupEventListeners();
+            
+            // Aguardar inicialização do banco de dados
+            await database.initPromise;
+            updateDatabaseStatus();
+            console.log('Painel administrativo inicializado com sucesso');
+        }
+
+        function setupEventListeners() {
+            // Admin password enter key
+            document.getElementById('adminPassword').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    authenticateAdmin();
+                }
+            });
+
+            // Close modal on overlay click
+            document.getElementById('clearDataModal').addEventListener('click', function(e) {
+                if (e.target === this) {
+                    hideClearDataModal();
+                }
+            });
+        }
+
+        // ===== SISTEMA ADMINISTRATIVO =====
+        async function authenticateAdmin() {
+            const password = document.getElementById('adminPassword').value;
+            
+            if (password === ADMIN_PASSWORD) {
+                isAdminAuthenticated = true;
+                document.getElementById('adminLogin').style.display = 'none';
+                document.getElementById('adminDashboard').style.display = 'block';
+                await loadAdminDashboard();
+            } else {
+                alert('Senha incorreta!');
+                document.getElementById('adminPassword').value = '';
+            }
+        }
+
+        function logout() {
+            isAdminAuthenticated = false;
+            document.getElementById('adminLogin').style.display = 'block';
+            document.getElementById('adminDashboard').style.display = 'none';
+            document.getElementById('adminPassword').value = '';
+        }
+
+        async function loadAdminDashboard() {
+            await refreshData();
+            showTab('overview');
+        }
+
+        async function refreshData() {
+            if (!isAdminAuthenticated) return;
+
+            try {
+                // Mostrar loading
+                document.getElementById('totalEvaluations').innerHTML = '<div class="loading"></div>';
+                document.getElementById('overallAverage').innerHTML = '<div class="loading"></div>';
+                document.getElementById('lastEvaluation').innerHTML = '<div class="loading"></div>';
+
+                // Carregar estatísticas
+                currentStats = await database.getStatistics();
+                
+                // Atualizar interface
+                updateOverviewTab();
+                updateReportsTab();
+                updateChartsTab();
+                updateDatabaseTab();
+                updateDatabaseStatus();
+                
+                console.log('Dados atualizados com sucesso');
+            } catch (error) {
+                console.error('Erro ao atualizar dados:', error);
+                alert('Erro ao carregar dados. Verifique o console para mais detalhes.');
+            }
+        }
+
+        function showTab(tabName) {
+            // Hide all tabs
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.style.display = 'none';
+            });
+            
+            // Remove active class from all buttons
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // Show selected tab
+            document.getElementById(tabName + 'Tab').style.display = 'block';
+            
+            // Add active class to clicked button
+            event.target.classList.add('active');
+            
+            // Load tab content if needed
+            switch(tabName) {
+                case 'overview':
+                    updateOverviewTab();
+                    break;
+                case 'reports':
+                    updateReportsTab();
+                    break;
+                case 'charts':
+                    updateChartsTab();
+                    break;
+                case 'database':
+                    updateDatabaseTab();
+                    break;
+            }
+        }
+
+        // ===== FUNÇÕES PARA APAGAR DADOS =====
+        function showClearDataModal() {
+            document.getElementById('clearDataModal').classList.add('active');
+        }
+
+        function hideClearDataModal() {
+            document.getElementById('clearDataModal').classList.remove('active');
+        }
+
+        async function confirmClearData() {
+            try {
+                // Limpar todos os dados
+                await database.clearAllData();
+                
+                // Atualizar interface
+                currentStats = null;
+                await refreshData();
+                
+                // Fechar modal
+                hideClearDataModal();
+                
+                // Mostrar confirmação
+                alert('Todos os dados foram apagados com sucesso!');
+                
+                console.log('Dados limpos com sucesso');
+            } catch (error) {
+                console.error('Erro ao limpar dados:', error);
+                alert('Erro ao limpar dados. Verifique o console para mais detalhes.');
+            }
+        }
+
+        // ===== ATUALIZAÇÃO DAS ABAS =====
+        function updateOverviewTab() {
+            if (!currentStats) return;
+
+            document.getElementById('totalEvaluations').textContent = currentStats.total;
+            
+            if (currentStats.total > 0) {
+                const averageText = currentStats.average >= 3.5 ? 'Excelente' : 
+                                 currentStats.average >= 2.5 ? 'Bom' : 
+                                 currentStats.average >= 1.5 ? 'Regular' : 'Péssimo';
+                document.getElementById('overallAverage').textContent = `${currentStats.average.toFixed(1)} (${averageText})`;
+                
+                // Última avaliação
+                if (currentStats.lastEvaluation) {
+                    const lastDate = new Date(currentStats.lastEvaluation.timestamp);
+                    const timeAgo = getTimeAgo(lastDate);
+                    document.getElementById('lastEvaluation').textContent = timeAgo;
+                } else {
+                    document.getElementById('lastEvaluation').textContent = '-';
+                }
+                
+                updateSectorBreakdowns();
+            } else {
+                document.getElementById('overallAverage').textContent = '-';
+                document.getElementById('lastEvaluation').textContent = '-';
+                clearSectorBreakdowns();
+            }
+        }
+
+        function updateSectorBreakdowns() {
+            if (!currentStats) return;
+
+            const sectors = ['geral', 'vendas', 'caixa', 'expedicao'];
+            const ratingLabels = {
+                'pessimo': { emoji: '😤', label: 'Péssimo' },
+                'regular': { emoji: '🤔', label: 'Regular' },
+                'bom': { emoji: '👍', label: 'Bom' },
+                'excelente': { emoji: '⭐', label: 'Excelente' }
+            };
+            
+            sectors.forEach(sector => {
+                const breakdown = currentStats.sectors[sector];
+                const container = document.getElementById(sector + 'Breakdown');
+                
+                container.innerHTML = '';
+                
+                Object.keys(ratingLabels).forEach(rating => {
+                    const count = breakdown[rating] || 0;
+                    const item = document.createElement('div');
+                    item.className = 'rating-item';
+                    item.innerHTML = `
+                        <span class="rating-label">
+                            <span>${ratingLabels[rating].emoji}</span>
+                            <span>${ratingLabels[rating].label}</span>
+                        </span>
+                        <span class="rating-count">${count}</span>
+                    `;
+                    container.appendChild(item);
+                });
+            });
+        }
+
+        function clearSectorBreakdowns() {
+            const sectors = ['geral', 'vendas', 'caixa', 'expedicao'];
+            sectors.forEach(sector => {
+                document.getElementById(sector + 'Breakdown').innerHTML = '<p style="color: #888;">Nenhuma avaliação ainda</p>';
+            });
+        }
+
+        function updateReportsTab() {
+            const reportContent = document.getElementById('detailedReport');
+            
+            if (!currentStats || currentStats.total === 0) {
+                reportContent.textContent = 'Nenhuma avaliação registrada ainda.';
+                return;
+            }
+            
+            let report = `RELATÓRIO DETALHADO DE AVALIAÇÕES - TELECIMENTO\n`;
+            report += `${'='.repeat(60)}\n\n`;
+            report += `Data de Geração: ${new Date().toLocaleString('pt-BR')}\n`;
+            report += `Total de Avaliações: ${currentStats.total}\n`;
+            report += `Média Geral: ${currentStats.average.toFixed(2)}\n\n`;
+            
+            // Estatísticas gerais
+            report += `ESTATÍSTICAS GERAIS\n`;
+            report += `${'-'.repeat(30)}\n`;
+            
+            const sectors = [
+                { key: 'geral', name: 'Setor Geral da Empresa' },
+                { key: 'vendas', name: 'Setor de Vendas' },
+                { key: 'caixa', name: 'Setor de Caixa' },
+                { key: 'expedicao', name: 'Setor de Expedição' }
+            ];
+            
+            sectors.forEach(sector => {
+                const breakdown = currentStats.sectors[sector.key];
+                const total = Object.values(breakdown).reduce((a, b) => a + b, 0);
+                
+                report += `\n${sector.name}:\n`;
+                report += `  Péssimo: ${breakdown.pessimo} (${total > 0 ? ((breakdown.pessimo/total)*100).toFixed(1) : 0}%)\n`;
+                report += `  Regular: ${breakdown.regular} (${total > 0 ? ((breakdown.regular/total)*100).toFixed(1) : 0}%)\n`;
+                report += `  Bom: ${breakdown.bom} (${total > 0 ? ((breakdown.bom/total)*100).toFixed(1) : 0}%)\n`;
+                report += `  Excelente: ${breakdown.excelente} (${total > 0 ? ((breakdown.excelente/total)*100).toFixed(1) : 0}%)\n`;
+            });
+            
+            // Histórico de avaliações
+            report += `\n\nHISTÓRICO DE AVALIAÇÕES (Últimas 10)\n`;
+            report += `${'-'.repeat(30)}\n`;
+            
+            const sortedEvaluations = currentStats.evaluations
+                .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))
+                .slice(0, 10);
+            
+            sortedEvaluations.forEach((evaluation, index) => {
+                const date = new Date(evaluation.timestamp).toLocaleString('pt-BR');
+                report += `\n${index + 1}. ${date}\n`;
+                report += `   ID: ${evaluation.id}\n`;
+                report += `   Geral: ${evaluation.geral} | Vendas: ${evaluation.vendas} | Caixa: ${evaluation.caixa} | Expedição: ${evaluation.expedicao}\n`;
+                if (evaluation.sessionId) {
+                    report += `   Sessão: ${evaluation.sessionId}\n`;
+                }
+            });
+            
+            if (currentStats.total > 10) {
+                report += `\n... e mais ${currentStats.total - 10} avaliações anteriores.\n`;
+            }
+            
+            reportContent.textContent = report;
+        }
+
+        function updateChartsTab() {
+            const canvas = document.getElementById('evaluationChart');
+            const ctx = canvas.getContext('2d');
+            
+            // Clear canvas
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            if (!currentStats || currentStats.total === 0) {
+                ctx.fillStyle = '#888';
+                ctx.font = '16px Inter';
+                ctx.textAlign = 'center';
+                ctx.fillText('Nenhuma avaliação para exibir', canvas.width / 2, canvas.height / 2);
+                return;
+            }
+            
+            // Prepare data
+            const sectors = ['geral', 'vendas', 'caixa', 'expedicao'];
+            const sectorNames = ['Geral', 'Vendas', 'Caixa', 'Expedição'];
+            const colors = ['#ff6b6b', '#4ecdc4', '#45b7d1', '#96ceb4'];
+            
+            // Calculate averages for each sector
+            const ratingValues = { 'pessimo': 1, 'regular': 2, 'bom': 3, 'excelente': 4 };
+            const averages = sectors.map(sector => {
+                const breakdown = currentStats.sectors[sector];
+                const total = Object.values(breakdown).reduce((a, b) => a + b, 0);
+                if (total === 0) return 0;
+                
+                let sum = 0;
+                Object.keys(breakdown).forEach(rating => {
+                    sum += breakdown[rating] * ratingValues[rating];
+                });
+                return sum / total;
+            });
+            
+            // Draw bar chart
+            const barWidth = 60;
+            const barSpacing = 80;
+            const maxHeight = 150;
+            const startX = 50;
+            const startY = canvas.height - 50;
+            
+            // Draw bars
+            averages.forEach((average, index) => {
+                const barHeight = (average / 4) * maxHeight;
+                const x = startX + index * barSpacing;
+                const y = startY - barHeight;
+                
+                // Draw bar
+                ctx.fillStyle = colors[index];
+                ctx.fillRect(x, y, barWidth, barHeight);
+                
+                // Draw value on top
+                ctx.fillStyle = '#fff';
+                ctx.font = '12px Inter';
+                ctx.textAlign = 'center';
+                ctx.fillText(average.toFixed(1), x + barWidth / 2, y - 5);
+                
+                // Draw sector name
+                ctx.fillText(sectorNames[index], x + barWidth / 2, startY + 20);
+            });
+            
+            // Draw title
+            ctx.fillStyle = '#fff';
+            ctx.font = 'bold 16px Inter';
+            ctx.textAlign = 'center';
+            ctx.fillText('Média de Avaliação por Setor', canvas.width / 2, 30);
+            
+            // Draw scale
+            ctx.fillStyle = '#888';
+            ctx.font = '10px Inter';
+            ctx.textAlign = 'right';
+            for (let i = 0; i <= 4; i++) {
+                const y = startY - (i / 4) * maxHeight;
+                ctx.fillText(i.toString(), startX - 10, y + 3);
+            }
+        }
+
+        async function updateDatabaseTab() {
+            const databaseInfo = document.getElementById('databaseInfo');
+            
+            try {
+                const info = await database.getDatabaseInfo();
+                
+                let report = `INFORMAÇÕES DO BANCO DE DADOS - TELECIMENTO\n`;
+                report += `${'='.repeat(50)}\n\n`;
+                report += `Data de Verificação: ${new Date().toLocaleString('pt-BR')}\n\n`;
+                
+                report += `CONFIGURAÇÃO\n`;
+                report += `${'-'.repeat(20)}\n`;
+                report += `Nome do Banco: ${info.databaseName}\n`;
+                report += `Versão: ${info.databaseVersion}\n`;
+                report += `Store: ${info.storeName}\n`;
+                report += `IndexedDB Suportado: ${info.indexedDBSupported ? 'Sim' : 'Não'}\n`;
+                report += `Conexão Ativa: ${info.databaseConnected ? 'Sim' : 'Não'}\n\n`;
+                
+                report += `ARMAZENAMENTO\n`;
+                report += `${'-'.repeat(20)}\n`;
+                report += `localStorage: ${formatBytes(info.localStorageSize)}\n`;
+                report += `sessionStorage: ${formatBytes(info.sessionStorageSize)}\n\n`;
+                
+                if (currentStats) {
+                    report += `ESTATÍSTICAS\n`;
+                    report += `${'-'.repeat(20)}\n`;
+                    report += `Total de Registros: ${currentStats.total}\n`;
+                    report += `Média Geral: ${currentStats.average.toFixed(2)}\n`;
+                    
+                    if (currentStats.lastEvaluation) {
+                        report += `Última Avaliação: ${new Date(currentStats.lastEvaluation.timestamp).toLocaleString('pt-BR')}\n`;
+                    }
+                }
+                
+                databaseInfo.textContent = report;
+            } catch (error) {
+                databaseInfo.textContent = `Erro ao carregar informações do banco de dados:\n${error.message}`;
+            }
+        }
+
+        async function updateDatabaseStatus() {
+            const indicator = document.getElementById('dbStatusIndicator');
+            const text = document.getElementById('dbStatusText');
+            
+            try {
+                await database.initPromise;
+                
+                if (database.db) {
+                    indicator.className = 'status-indicator status-online';
+                    text.textContent = `IndexedDB conectado (${DB_NAME} v${DB_VERSION})`;
+                } else {
+                    indicator.className = 'status-indicator status-offline';
+                    text.textContent = 'IndexedDB não disponível, usando localStorage';
+                }
+            } catch (error) {
+                indicator.className = 'status-indicator status-offline';
+                text.textContent = `Erro na conexão: ${error.message}`;
+            }
+        }
+
+        // ===== FUNÇÕES DE EXPORTAÇÃO =====
+        function exportReport() {
+            updateReportsTab();
+            const reportContent = document.getElementById('detailedReport').textContent;
+            
+            const blob = new Blob([reportContent], { type: 'text/plain;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
+            
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `relatorio-telecimento-${new Date().toISOString().split('T')[0]}.txt`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            
+            URL.revokeObjectURL(url);
+        }
+
+        async function exportDatabaseInfo() {
+            await updateDatabaseTab();
+            const databaseInfo = document.getElementById('databaseInfo').textContent;
+            
+            const blob = new Blob([databaseInfo], { type: 'text/plain;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
+            
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `database-info-telecimento-${new Date().toISOString().split('T')[0]}.txt`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            
+            URL.revokeObjectURL(url);
+        }
+
+        // ===== FUNÇÕES UTILITÁRIAS =====
+        function getTimeAgo(date) {
+            const now = new Date();
+            const diffMs = now - date;
+            const diffMins = Math.floor(diffMs / 60000);
+            const diffHours = Math.floor(diffMs / 3600000);
+            const diffDays = Math.floor(diffMs / 86400000);
+            
+            if (diffMins < 1) return 'Agora mesmo';
+            if (diffMins < 60) return `${diffMins} min atrás`;
+            if (diffHours < 24) return `${diffHours}h atrás`;
+            if (diffDays < 7) return `${diffDays} dias atrás`;
+            
+            return date.toLocaleDateString('pt-BR');
+        }
+
+        function formatBytes(bytes) {
+            if (bytes === 0) return '0 Bytes';
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        }
+
+        // ===== FUNÇÕES DE DEBUG (remover em produção) =====
+        async function addTestData() {
+            const testEvaluations = [
+                { id: Date.now() + 1, timestamp: new Date().toISOString(), geral: 'bom', vendas: 'excelente', caixa: 'bom', expedicao: 'regular', userAgent: 'test', sessionId: 'test1' },
+                { id: Date.now() + 2, timestamp: new Date().toISOString(), geral: 'excelente', vendas: 'bom', caixa: 'excelente', expedicao: 'bom', userAgent: 'test', sessionId: 'test2' },
+                { id: Date.now() + 3, timestamp: new Date().toISOString(), geral: 'regular', vendas: 'bom', caixa: 'regular', expedicao: 'pessimo', userAgent: 'test', sessionId: 'test3' },
+                { id: Date.now() + 4, timestamp: new Date().toISOString(), geral: 'bom', vendas: 'regular', caixa: 'bom', expedicao: 'excelente', userAgent: 'test', sessionId: 'test4' },
+                { id: Date.now() + 5, timestamp: new Date().toISOString(), geral: 'excelente', vendas: 'excelente', caixa: 'bom', expedicao: 'bom', userAgent: 'test', sessionId: 'test5' }
+            ];
+            
+            for (const evaluation of testEvaluations) {
+                await database.saveEvaluation(evaluation);
+            }
+            
+            await refreshData();
+            console.log('Dados de teste adicionados!');
+        }
+
+        // Descomente as linhas abaixo para adicionar dados de teste
+        // window.addTestData = addTestData;
+        // window.database = database;
+    </script>
+</body>
+</html>
+
