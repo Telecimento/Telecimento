@@ -1,0 +1,785 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel Administrativo - Telecimento</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+            color: #ffffff;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header */
+        .header {
+            background: rgba(0, 0, 0, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 2px solid #FFD700;
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo-text {
+            font-size: 2rem;
+            font-weight: 800;
+            margin: 0;
+            letter-spacing: 1px;
+        }
+
+        .tele {
+            color: #ffffff;
+        }
+
+        .cimento {
+            color: #cccccc;
+        }
+
+        .admin-title {
+            color: #FFD700;
+            font-size: 1.2rem;
+        }
+
+        /* Login Modal */
+        .login-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+        }
+
+        .login-content {
+            background: linear-gradient(135deg, #2d2d2d, #1a1a1a);
+            padding: 2rem;
+            border-radius: 15px;
+            border: 2px solid #FFD700;
+            text-align: center;
+            min-width: 300px;
+        }
+
+        .login-title {
+            color: #FFD700;
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .login-input {
+            width: 100%;
+            padding: 0.8rem;
+            margin-bottom: 1rem;
+            border: 1px solid #FFD700;
+            border-radius: 5px;
+            background: rgba(255, 255, 255, 0.1);
+            color: #ffffff;
+            font-size: 1rem;
+        }
+
+        .login-input::placeholder {
+            color: #cccccc;
+        }
+
+        .login-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+        }
+
+        .btn {
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: #FFD700;
+            color: #1a1a1a;
+        }
+
+        .btn-primary:hover {
+            background: #FFA500;
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: #dc3545;
+            color: #ffffff;
+        }
+
+        .btn-secondary:hover {
+            background: #c82333;
+            transform: translateY(-2px);
+        }
+
+        /* Admin Panel */
+        .admin-panel {
+            display: none;
+            padding: 2rem 0;
+        }
+
+        .panel-title {
+            text-align: center;
+            color: #FFD700;
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Stats Cards */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.1), rgba(255, 165, 0, 0.05));
+            border: 1px solid rgba(255, 215, 0, 0.3);
+            border-radius: 10px;
+            padding: 1.5rem;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(255, 215, 0, 0.6);
+            box-shadow: 0 10px 20px rgba(255, 215, 0, 0.2);
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: #FFD700;
+            display: block;
+        }
+
+        .stat-label {
+            color: #cccccc;
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+        }
+
+        /* Report Blocks */
+        .reports-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .report-block {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02));
+            border: 1px solid rgba(255, 215, 0, 0.3);
+            border-radius: 10px;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .report-block:hover {
+            border-color: rgba(255, 215, 0, 0.6);
+            transform: translateY(-3px);
+        }
+
+        .block-title {
+            color: #FFD700;
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .metric-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+            padding: 0.3rem 0;
+            border-bottom: 1px solid rgba(255, 215, 0, 0.1);
+        }
+
+        .metric-label {
+            color: #cccccc;
+        }
+
+        .metric-value {
+            color: #FFD700;
+            font-weight: 600;
+        }
+
+        /* Opinions Section */
+        .opinions-container {
+            width: 100%;
+        }
+
+        .opinion-filters {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .opinion-filter-btn {
+            background: rgba(255, 215, 0, 0.2);
+            color: #FFD700;
+            border: 1px solid #FFD700;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+
+        .opinion-filter-btn:hover {
+            background: rgba(255, 215, 0, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .opinion-filter-btn.active {
+            background: #FFD700;
+            color: #1a1a1a;
+        }
+
+        .opinions-list {
+            max-height: 400px;
+            overflow-y: auto;
+            border: 1px solid rgba(255, 215, 0, 0.3);
+            border-radius: 8px;
+            padding: 1rem;
+        }
+
+        .opinion-item {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 215, 0, 0.2);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .opinion-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 215, 0, 0.4);
+        }
+
+        .opinion-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+            color: #FFD700;
+        }
+
+        .opinion-rating {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .opinion-text {
+            color: #ffffff;
+            line-height: 1.5;
+            font-style: italic;
+            margin-bottom: 0.5rem;
+        }
+
+        .opinion-sectors {
+            display: flex;
+            gap: 1rem;
+            font-size: 0.8rem;
+            color: #cccccc;
+        }
+
+        .opinion-sector {
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        .no-opinions {
+            text-align: center;
+            color: #cccccc;
+            font-style: italic;
+            padding: 2rem;
+        }
+
+        /* Filters and Downloads */
+        .filters {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .filter-btn {
+            background: rgba(255, 215, 0, 0.2);
+            color: #FFD700;
+            border: 1px solid #FFD700;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+
+        .filter-btn:hover {
+            background: rgba(255, 215, 0, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .filter-btn.active {
+            background: #FFD700;
+            color: #1a1a1a;
+        }
+
+        .download-options {
+            display: flex;
+            gap: 0.5rem;
+            margin-left: auto;
+            flex-wrap: wrap;
+        }
+
+        /* Charts */
+        .charts-section {
+            margin-top: 2rem;
+        }
+
+        .chart-container {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02));
+            border: 1px solid rgba(255, 215, 0, 0.3);
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .chart-title {
+            color: #FFD700;
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        .chart {
+            position: relative;
+            height: 300px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .chart-legend {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .legend-color {
+            width: 15px;
+            height: 15px;
+            border-radius: 3px;
+        }
+
+        /* Action Buttons */
+        .action-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-top: 2rem;
+        }
+
+        .btn-danger {
+            background: #dc3545;
+            color: #ffffff;
+        }
+
+        .btn-danger:hover {
+            background: #c82333;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .reports-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .filters {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .download-options {
+                margin-left: 0;
+                margin-top: 1rem;
+            }
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <h1 class="logo-text">
+                    <span class="tele">Tele</span><span class="cimento">CIMENTO</span>
+                </h1>
+                <div class="admin-title">
+                    <i class="fas fa-shield-alt"></i>
+                    Painel Administrativo
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Login Modal -->
+    <div class="login-modal" id="loginModal">
+        <div class="login-content">
+            <h2 class="login-title">
+                <i class="fas fa-lock"></i>
+                Acesso Administrativo
+            </h2>
+            <input type="password" class="login-input" id="passwordInput" placeholder="Digite a senha" onkeypress="handleEnterKey(event)">
+            <div class="login-buttons">
+                <button class="btn btn-primary" onclick="adminLogin()">Entrar</button>
+                <button class="btn btn-secondary" onclick="window.close()">Cancelar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Admin Panel -->
+    <div class="admin-panel" id="adminPanel">
+        <div class="container">
+            <h1 class="panel-title">Painel Administrativo</h1>
+
+            <!-- Stats Cards -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <span class="stat-number" id="totalVotes">0</span>
+                    <div class="stat-label">Total de Votos</div>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-number" id="todayVotes">0</span>
+                    <div class="stat-label">Votos Hoje</div>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-number" id="averageRating">0.0</span>
+                    <div class="stat-label">Média Geral</div>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-number" id="satisfactionRate">0%</span>
+                    <div class="stat-label">Taxa de Satisfação</div>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-number" id="feedbackCount">0</span>
+                    <div class="stat-label">Feedbacks Recebidos</div>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-number" id="avgTime">0</span>
+                    <div class="stat-label">Tempo Médio (min)</div>
+                </div>
+            </div>
+
+            <!-- Report Blocks -->
+            <div class="reports-grid">
+                <div class="report-block">
+                    <div class="block-title">
+                        <i class="fas fa-chart-pie"></i>
+                        Resumo Geral
+                    </div>
+                    <div class="block-content" id="generalReport">
+                        <div class="metric-item">
+                            <span class="metric-label">Avaliações Positivas:</span>
+                            <span class="metric-value" id="positiveRate">0%</span>
+                        </div>
+                        <div class="metric-item">
+                            <span class="metric-label">Avaliações Negativas:</span>
+                            <span class="metric-value" id="negativeRate">0%</span>
+                        </div>
+                        <div class="metric-item">
+                            <span class="metric-label">Melhor Setor:</span>
+                            <span class="metric-value" id="bestSector">-</span>
+                        </div>
+                        <div class="metric-item">
+                            <span class="metric-label">Setor a Melhorar:</span>
+                            <span class="metric-value" id="worstSector">-</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="report-block">
+                    <div class="block-title">
+                        <i class="fas fa-shopping-cart"></i>
+                        Setor de Vendas
+                    </div>
+                    <div class="block-content" id="salesReport">
+                        <div class="metric-item">
+                            <span class="metric-label">Média de Avaliação:</span>
+                            <span class="metric-value" id="salesAvg">0.0</span>
+                        </div>
+                        <div class="metric-item">
+                            <span class="metric-label">Total de Avaliações:</span>
+                            <span class="metric-value" id="salesTotal">0</span>
+                        </div>
+                        <div class="metric-item">
+                            <span class="metric-label">Satisfação:</span>
+                            <span class="metric-value" id="salesSatisfaction">0%</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="report-block">
+                    <div class="block-title">
+                        <i class="fas fa-cash-register"></i>
+                        Caixa
+                    </div>
+                    <div class="block-content" id="cashReport">
+                        <div class="metric-item">
+                            <span class="metric-label">Média de Avaliação:</span>
+                            <span class="metric-value" id="cashAvg">0.0</span>
+                        </div>
+                        <div class="metric-item">
+                            <span class="metric-label">Total de Avaliações:</span>
+                            <span class="metric-value" id="cashTotal">0</span>
+                        </div>
+                        <div class="metric-item">
+                            <span class="metric-label">Satisfação:</span>
+                            <span class="metric-value" id="cashSatisfaction">0%</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="report-block">
+                    <div class="block-title">
+                        <i class="fas fa-truck"></i>
+                        Setor de Expedição
+                    </div>
+                    <div class="block-content" id="expeditionReport">
+                        <div class="metric-item">
+                            <span class="metric-label">Média de Avaliação:</span>
+                            <span class="metric-value" id="expeditionAvg">0.0</span>
+                        </div>
+                        <div class="metric-item">
+                            <span class="metric-label">Total de Avaliações:</span>
+                            <span class="metric-value" id="expeditionTotal">0</span>
+                        </div>
+                        <div class="metric-item">
+                            <span class="metric-label">Satisfação:</span>
+                            <span class="metric-value" id="expeditionSatisfaction">0%</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="report-block">
+                    <div class="block-title">
+                        <i class="fas fa-comment-dots"></i>
+                        Análise de Feedbacks
+                    </div>
+                    <div class="block-content" id="feedbackReport">
+                        <div class="metric-item">
+                            <span class="metric-label">Feedbacks Positivos:</span>
+                            <span class="metric-value" id="positiveFeedbacks">0</span>
+                        </div>
+                        <div class="metric-item">
+                            <span class="metric-label">Feedbacks Negativos:</span>
+                            <span class="metric-value" id="negativeFeedbacks">0</span>
+                        </div>
+                        <div class="metric-item">
+                            <span class="metric-label">Sugestões de Melhoria:</span>
+                            <span class="metric-value" id="suggestions">0</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="report-block">
+                    <div class="block-title">
+                        <i class="fas fa-clock"></i>
+                        Análise Temporal
+                    </div>
+                    <div class="block-content" id="timeReport">
+                        <div class="metric-item">
+                            <span class="metric-label">Pico de Avaliações:</span>
+                            <span class="metric-value" id="peakTime">14:00h</span>
+                        </div>
+                        <div class="metric-item">
+                            <span class="metric-label">Tendência Semanal:</span>
+                            <span class="metric-value" id="weeklyTrend">Crescente</span>
+                        </div>
+                        <div class="metric-item">
+                            <span class="metric-label">Crescimento Mensal:</span>
+                            <span class="metric-value" id="monthlyGrowth">+15%</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="report-block">
+                    <div class="block-title">
+                        <i class="fas fa-quote-left"></i>
+                        Opiniões dos Clientes
+                    </div>
+                    <div class="block-content" id="customerOpinions">
+                        <div class="opinions-container">
+                            <div class="opinion-filters">
+                                <button class="opinion-filter-btn active" onclick="filterOpinions('all')">Todas</button>
+                                <button class="opinion-filter-btn" onclick="filterOpinions('positive')">Positivas</button>
+                                <button class="opinion-filter-btn" onclick="filterOpinions('negative')">Negativas</button>
+                                <button class="opinion-filter-btn" onclick="filterOpinions('suggestions')">Sugestões</button>
+                            </div>
+                            <div class="opinions-list" id="opinionsList">
+                                <!-- Opiniões serão carregadas aqui via JavaScript -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Filters -->
+            <div class="filters">
+                <button class="filter-btn active" onclick="filterData('all')">Todos</button>
+                <button class="filter-btn" onclick="filterData('today')">Hoje</button>
+                <button class="filter-btn" onclick="filterData('week')">Esta Semana</button>
+                <button class="filter-btn" onclick="filterData('month')">Este Mês</button>
+                
+                <div class="download-options">
+                    <button class="btn btn-primary" onclick="downloadReport('csv')">
+                        <i class="fas fa-file-csv"></i> CSV
+                    </button>
+                    <button class="btn btn-primary" onclick="downloadReport('txt')">
+                        <i class="fas fa-file-alt"></i> Bloco de Notas
+                    </button>
+                    <button class="btn btn-primary" onclick="downloadReport('json')">
+                        <i class="fas fa-file-code"></i> JSON
+                    </button>
+                    <button class="btn btn-primary" onclick="downloadCompleteReport()">
+                        <i class="fas fa-file-download"></i> Relatório Completo
+                    </button>
+                </div>
+            </div>
+
+            <!-- Charts Section -->
+            <div class="charts-section">
+                <div class="chart-container">
+                    <h3 class="chart-title">Distribuição de Avaliações Gerais</h3>
+                    <div class="chart" id="generalChart">
+                        <canvas id="generalChartCanvas" width="800" height="300"></canvas>
+                    </div>
+                    <div class="chart-legend">
+                        <div class="legend-item">
+                            <div class="legend-color" style="background: #FF6B6B;"></div>
+                            <span>Ruim</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-color" style="background: #FFA500;"></div>
+                            <span>Regular</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-color" style="background: #4ECDC4;"></div>
+                            <span>Bom</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-color" style="background: #FFD700;"></div>
+                            <span>Excelente</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="chart-container">
+                    <h3 class="chart-title">Desempenho por Setor</h3>
+                    <div class="chart" id="sectorChart">
+                        <canvas id="sectorChartCanvas" width="800" height="300"></canvas>
+                    </div>
+                    <div class="chart-legend">
+                        <div class="legend-item">
+                            <div class="legend-color" style="background: #FFD700;"></div>
+                            <span>Vendas</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-color" style="background: #FFA500;"></div>
+                            <span>Caixa</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-color" style="background: #FF8C00;"></div>
+                            <span>Expedição</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="chart-container">
+                    <h3 class="chart-title">Evolução Temporal das Avaliações</h3>
+                    <div class="chart" id="timeChart">
+                        <canvas id="timeChartCanvas" width="800" height="300"></canvas>
+                    </div>
+                    <div class="chart-legend">
+                        <div class="legend-item">
+                            <div class="legend-color" style="background: #4ECDC4;"></div>
+                            <span>Votos por Dia</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="action-buttons">
+                <button class="btn btn-danger" onclick="clearAllData()">
+                    <i class="fas fa-trash"></i>
+                    Apagar Todos os Dados
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="admin.js"></script>
+</body>
+</html>
+
